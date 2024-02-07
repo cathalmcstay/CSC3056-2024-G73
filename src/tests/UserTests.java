@@ -55,6 +55,20 @@ public class UserTests {
         } else {
             System.out.println(TestUtils.TEXT_COLOR_RED + "TC5-getMobile_number-FAILED" + TestUtils.TEXT_COLOR_RESET);
         }
+        
+        //assert Username
+        assert testUser.getUsername() == test_username;
+        //assert Password
+        assert testUser.getPassword() == test_password;
+        //assert First Name
+        assert testUser.getFirst_name() == test_first_name;
+        //assert Second Name
+        assert testUser.getLast_name() == test_last_name;
+        //assert Mobile Number
+        assert testUser.getMobile_number() == test_mobile_number;
+        
+        System.out.println("All Java assertations in the test suite passed (None failed)");
+        
     }
 
 }
