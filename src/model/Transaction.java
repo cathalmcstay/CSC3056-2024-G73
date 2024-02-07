@@ -33,9 +33,13 @@ public class Transaction {
 	}
 	@Override
 	public String toString() {
-		return "Transaction [account_number=" + account_number + ", transaction_amount=" + transaction_amount
-				+ ", transaction_date=" + transaction_date + "]";
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    return String.format("%-20s | %12.2f | %-20s", 
+	            account_number, 
+	            transaction_amount, 
+	            sdf.format(transaction_date));
 	}
+
 	
 	
 }

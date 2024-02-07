@@ -45,10 +45,15 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [account_number=" + account_number + ", username_of_account_holder="
-				+ username_of_account_holder + ", account_type=" + account_type + ", account_opening_date="
-				+ account_opening_date + "]";
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    return String.format("%-10s| %-30s| %-10s| %-15s", 
+	            account_number, 
+	            username_of_account_holder, 
+	            account_type, 
+	            sdf.format((account_opening_date)));
 	}
+
+
 	
 	
 }

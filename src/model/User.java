@@ -49,9 +49,14 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", first_name=" + first_name + ", last_name="
-				+ last_name + ", mobile_number=" + mobile_number + "]";
+	    return String.format("%-25s| %-15s| %-15s| %-15s| %-15s", 
+	            username, 
+	            password, 
+	            first_name, 
+	            last_name, 
+	            mobile_number);
 	}
+
 	
 	
 }
