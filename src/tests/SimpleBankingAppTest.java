@@ -67,23 +67,42 @@ public class SimpleBankingAppTest {
 	}
 
 	// this test method (test case) verifies if the Withdraw feature works properly
-	/* TODO
 	public static void testWithdrawals() {
 		// 1-Setup phase
+		// Adding balance to account to prevent negative balance		
+		double depositAmount = 50.21;
+		SimpleBankingApp.addTransaction("5495-1234", depositAmount);
+		
+		double balanceBefore = SimpleBankingApp.getBalance("5495-1234");
+		double withdrawAmount = -10.99;
+		
 		
 		// 2-Exercise phase
+		SimpleBankingApp.addTransaction("5495-1234", withdrawAmount);
+		double balanceAfter = SimpleBankingApp.getBalance("5495-1234");
+		
 		
 		// 3-verify
+		assert balanceBefore + withdrawAmount == balanceAfter;
+		if (balanceBefore + withdrawAmount == balanceAfter)
+			System.out.println(TestUtils.TEXT_COLOR_GREEN + "testDeposits: TC2 passed"+ TestUtils.TEXT_COLOR_RESET);
+		else {
+			System.out.println(TestUtils.TEXT_COLOR_RED + "testDeposits: TC2 FAILED XXX: balanceBefore + depositAmount != balanceAfter");
+			System.out.format("testDeposits: balanceBefore = %.2f ; depositAmount = %.2f ; balanceAfter = %.2f %s\n", 
+					balanceBefore , withdrawAmount , balanceAfter, TestUtils.TEXT_COLOR_RESET);
+		}
 		
-		// 4-tear-down
+		// 4-tear-down: put the system state back in where it was
+		// read more about the tear-down phase of test cases: http://xunitpatterns.com/Four%20Phase%20Test.html
+		SimpleBankingApp.addTransaction("5495-1234", -balanceAfter);
+
 	}
-	*/
 	
 	public static void main(String[] args) {
 		// we need to call our test cases (methods)
 		testLoadData();
 		testDeposits();
-		// testWithdrawals(); -- uncomment this call, when you have developed the test method (test case)
+		testWithdrawals();
 	}
 
 }
