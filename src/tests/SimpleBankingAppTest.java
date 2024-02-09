@@ -85,10 +85,10 @@ public class SimpleBankingAppTest {
 		// 3-verify
 		assert balanceBefore + withdrawAmount == balanceAfter;
 		if (balanceBefore + withdrawAmount == balanceAfter)
-			System.out.println(TestUtils.TEXT_COLOR_GREEN + "testDeposits: TC2 passed"+ TestUtils.TEXT_COLOR_RESET);
+			System.out.println(TestUtils.TEXT_COLOR_GREEN + "testWithdrawals: TC2 passed"+ TestUtils.TEXT_COLOR_RESET);
 		else {
-			System.out.println(TestUtils.TEXT_COLOR_RED + "testDeposits: TC2 FAILED XXX: balanceBefore + depositAmount != balanceAfter");
-			System.out.format("testDeposits: balanceBefore = %.2f ; depositAmount = %.2f ; balanceAfter = %.2f %s\n", 
+			System.out.println(TestUtils.TEXT_COLOR_RED + "testWithdrawals: TC2 FAILED XXX: balanceBefore + withdrawAmount != balanceAfter");
+			System.out.format("testWithdrawals: balanceBefore = %.2f ; withdrawAmount = %.2f ; balanceAfter = %.2f %s\n", 
 					balanceBefore , withdrawAmount , balanceAfter, TestUtils.TEXT_COLOR_RESET);
 		}
 		
