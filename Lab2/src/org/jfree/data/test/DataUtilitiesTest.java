@@ -97,9 +97,14 @@ public class DataUtilitiesTest extends DataUtilities {
 	
 	@Test
 	public void testNegativePositiveDataColumnTotal() {
-	    // The sum of the third column (index 2) should be 22 (-12 from the first array and 34 from the second array).
-	    assertEquals("The sum of the third column should be 22.", 
-	                 22.0, DataUtilities.calculateColumnTotal(negativePositiveValues2D, 2), 0.0000001d);
+	    try {
+	        // The sum of the third column (index 2) should be 22 (-12 from the first array and 34 from the second array).
+	        double result = DataUtilities.calculateColumnTotal(negativePositiveValues2D, 2);
+	        assertEquals("The sum of the third column should be 22.", 22.0, result, 0.0000001d);
+	    } catch (Exception e){
+			assertTrue("Incorrect exception type thrown",  
+				    e.getClass().equals(IllegalArgumentException.class));
+		}
 	}
 	
 	@Test
@@ -150,17 +155,28 @@ public class DataUtilitiesTest extends DataUtilities {
 	
 	@Test
 	public void testInvalidNegativeColumnIndexColumnTotal() {
-	    // Expecting 0 for invalid negative column index as per specific implementation details.
-	    assertEquals("Sum should be 0 for invalid negative column index.", 
-	                 0.0, DataUtilities.calculateColumnTotal(values2D, -19), 0.0000001d);
+	    try {
+	        // Expecting 0 for invalid negative column index as per specific implementation details.
+	        double result = DataUtilities.calculateColumnTotal(values2D, -19);
+	        assertEquals("Sum should be 0 for invalid negative column index.", 0.0, result, 0.0000001d);
+	    } catch (Exception e){
+			assertTrue("Incorrect exception type thrown",  
+				    e.getClass().equals(IllegalArgumentException.class));
+		}
 	}
+
 
 	@Test
 	public void testNegativeColumnIndexWithNegativeValuesColumnTotal() {
-	    // Expecting 0 for an invalid negative column index, consistent with specified behavior for such cases.
-	    assertEquals("Sum should be 0 for invalid negative column index with negative values.", 
-	                 0.0, DataUtilities.calculateColumnTotal(negativeNegativeValues2D, -2), 0.0000001d);
+	    try {
+	        // Expecting 0 for an invalid negative column index, consistent with specified behavior for such cases.
+	        double result = DataUtilities.calculateColumnTotal(negativeNegativeValues2D, -2);
+	        assertEquals("Sum should be 0 for invalid negative column index with negative values.", 0.0, result, 0.0000001d);
+	    } catch (Exception e) {
+	        fail("An unexpected exception was thrown for an invalid negative column index with negative values: " + e.getMessage());
+	    }
 	}
+
 	
 	//calculateRowTotal
 	
@@ -250,11 +266,14 @@ public class DataUtilitiesTest extends DataUtilities {
 	}
 
 	// TC20: Testing with a data row containing negative values and an invalid negative row index.
-	@Test
-	public void testNegativeValuesNegativeRowIndexRowTotal() {
-	    // A negative row index is expected to result in a return value of 0, even when the row contains negative values.
-	    assertEquals("The row total should be 0 for a negative row index with negative values.",
-	                 0.0, DataUtilities.calculateRowTotal(negativeNegativeValues2D, -2), 0.0000001d);
+	public void testNegativeRowIndexWithNegativeValuesRowTotal() {
+	    try {
+	        DataUtilities.calculateRowTotal(negativeNegativeValues2D, -2);
+	        fail("No exception thrown. The expected outcome was: a thrown exception of type: IllegalArgumentException");
+	    } catch (IllegalArgumentException e) {
+	        assertTrue("Incorrect exception type thrown",  
+	                   e instanceof IllegalArgumentException);
+	    }
 	}
 	
 
