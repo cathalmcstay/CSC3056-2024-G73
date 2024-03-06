@@ -480,4 +480,12 @@ public class RangeTest {
 		Range range = new Range(0, 0);
 		assertEquals("toString: Testing when both values are Zero", "Range[0.0,0.0]", range.toString());
 	}
+
+	// TC62
+	@Test(expected = IllegalArgumentException.class)
+	public void testToStringWhenGivenBlankDoubles() {
+		Range range = new Range(Double.NaN, Double.NaN);
+		assertEquals("toString: Testing when both values are Zero", "Range[NaN,NaN]", range.toString());
+	}
+
 }
