@@ -610,7 +610,8 @@ public class DataUtilitiesTest extends DataUtilities {
 
 			assertEquals((double) object_under_test.getValue(0), 1.0, 0.0000001d);
 		} catch (Exception e) {
-			fail("Expected an input that didn't duplicate keys : " + e.getClass().equals(IllegalArgumentException.class));
+			fail("Expected an input that didn't duplicate keys : "
+					+ e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 
