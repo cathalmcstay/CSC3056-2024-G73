@@ -277,4 +277,100 @@ public class DataUtilitiesTest extends DataUtilities {
 	}
 	
 
+	//createNumberArray
+	
+	// TC21: Test with the smallest possible double value.
+    @Test
+    public void testWithSmallestDoubleValueCreateNumberArray() {
+        double[] data = {Double.MIN_VALUE};
+        Number[] expected = {Double.MIN_VALUE};
+        assertArrayEquals("Array should contain the smallest double value",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC22: Test with the largest possible double value.
+    @Test
+    public void testWithLargestDoubleValueCreateNumberArray() {
+        double[] data = {Double.MAX_VALUE};
+        Number[] expected = {Double.MAX_VALUE};
+        assertArrayEquals("Array should contain the largest double value",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC23: Test with zero.
+    @Test
+    public void testWithZeroCreateNumberArray() {
+        double[] data = {0.0};
+        Number[] expected = {0.0};
+        assertArrayEquals("Array should contain zero",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC24: Test with a mix of positive, negative, and zero values.
+    @Test
+    public void testWithMixedValues() {
+        double[] data = {-1.0, 0.0, 1.0};
+        Number[] expected = {-1.0, 0.0, 1.0};
+        assertArrayEquals("Array should correctly represent mixed values",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC25: Test with an empty array.
+    @Test
+    public void testWithEmptyArrayCreateNumberArray() {
+        double[] data = {};
+        Number[] expected = {};
+        assertArrayEquals("Array should be empty",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC26: Test with null input (expected to throw IllegalArgumentException).
+    @Test
+    public void testWithNullInputCreateNumberArray() {
+    	try {
+	        DataUtilities.createNumberArray(null);
+	        fail("An exception was expected due to the negative values followed by an empty row, but none was thrown.");
+	    } catch (Exception e){
+			assertTrue("Incorrect exception type thrown",  
+				    e.getClass().equals(IllegalArgumentException.class));
+		}
+    }
+
+    // TC27: Test with high precision double values.
+    @Test
+    public void testWithHighPrecisionValuesCreateNumberArray() {
+        double[] data = {0.1234567890123456, -0.1234567890123456};
+        Number[] expected = {0.1234567890123456, -0.1234567890123456};
+        assertArrayEquals("Array should accurately represent high precision values",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC28: Test with subnormal double values.
+    @Test
+    public void testWithSubnormalValuesCreateNumberArray() {
+        double[] data = {Double.MIN_NORMAL / 2, -Double.MIN_NORMAL / 2};
+        Number[] expected = {Double.MIN_NORMAL / 2, -Double.MIN_NORMAL / 2};
+        assertArrayEquals("Array should accurately represent subnormal values",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+
+    // TC29: Test with special double values (NaN, positive/negative infinity).
+    @Test
+    public void testWithSpecialDoubleValuesCreateNumberArray() {
+        double[] data = {Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+        Number[] expected = {Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+        assertArrayEquals("Array should correctly handle special double values",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+    
+    // TC30: Test with 'regular values'.
+    @Test
+    public void testRegularValueCreateNumberArray() {
+    	double[] data = {1.0, 2.0, 3.0};
+        Number[] expected = {1.0, 2.0, 3.0};
+        assertArrayEquals("Array should accurately represent regular values",
+                          expected, DataUtilities.createNumberArray(data));
+    }
+	
+	
 }
