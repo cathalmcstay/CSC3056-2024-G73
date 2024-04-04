@@ -487,5 +487,102 @@ public class RangeTest {
 		Range range = new Range(Double.NaN, Double.NaN);
 		assertEquals("toString: Testing when both values are Zero", "Range[NaN,NaN]", range.toString());
 	}
+	
+	// TC63: Testing getLength method for correct length calculation
+	@Test
+	public void testGetLengthForCorrectCalculation() {
+	    // Arrange: Create a range with known lower and upper bounds
+	    double lowerBound = 5.0;
+	    double upperBound = 15.0;
+	    Range range = new Range(lowerBound, upperBound); // Assuming Range(lower, upper) constructor
+
+	    // Act: Calculate the length of this range
+	    double length = range.getLength();
+
+	    // Assert: Verify that the length is as expected
+	    double expectedLength = upperBound - lowerBound;
+	    assertEquals("getLength: Testing for correct length calculation", expectedLength, length, 0.0);
+	}
+
+	
+	// TC64: Testing intersects method when lower is less than or equal to
+	// this.lower and upper is greater than this.lower
+	@Test
+	public void testIntersectsWhenLowerIsLessThanOrEqualAndUpperIsGreaterThanThisLower() {
+		// Arrange: Create a range where this.lower is known and both test lower and
+		// upper are defined relative to it
+		Range range = new Range(10, 20); // Assuming Range(lower, upper) constructor
+
+		// Act: Check if the given lower and upper values intersect with this range
+		boolean intersects = range.intersects(8, 15); // lower <= this.lower and upper > this.lower
+
+		// Assert: Verify that the method returns true, as upper is greater than
+		// this.lower
+		assertEquals("intersects: Testing when lower <= this.lower and upper > this.lower", true, intersects);
+	}
+
+	// TC65: Testing intersects method when lower is less than or equal to
+	// this.lower and upper is not greater than this.lower
+	@Test
+	public void testIntersectsWhenLowerIsLessThanOrEqualAndUpperIsNotGreaterThanThisLower() {
+		// Arrange: Create a range with a known this.lower and define both test lower
+		// and upper in relation to it
+		Range range = new Range(10, 20); // Assuming Range(lower, upper) constructor
+
+		// Act: Check if the given lower and upper values intersect with this range
+		boolean intersects = range.intersects(9, 10); // lower <= this.lower and upper <= this.lower
+
+		// Assert: Verify that the method returns false, as upper is not greater than
+		// this.lower
+		assertEquals("intersects: Testing when lower <= this.lower and upper <= this.lower", false, intersects);
+	}
+
+	// TC66: Testing intersects method when the lower bound is above this.lower and
+	// the upper bound is below this.upper
+	@Test
+	public void testIntersectsOverlapWithLowerAboveThisLowerAndUpperBelowThisUpper() {
+		Range range = new Range(5, 10);
+		boolean result = range.intersects(6, 9);
+		assertEquals("intersects: Testing with overlap and lower above this.lower and upper below this.upper", true,
+				result);
+	}
+
+	// TC67: Testing intersects method for a case where the second range is
+	// completely above the first range
+	@Test
+	public void testIntersectsNoOverlapWithLowerAboveThisLowerAndUpperAboveThisUpper() {
+		Range range = new Range(5, 10);
+		boolean result = range.intersects(11, 15);
+		assertEquals("intersects: Testing with no overlap and lower above this.upper", false, result);
+	}
+
+	// TC68: Testing intersects method for a case where the second range's upper
+	// bound is less than its lower bound
+	@Test
+	public void testIntersectsNoOverlapWithUpperBelowThisUpperAndLower() {
+		Range range = new Range(5, 10);
+		boolean result = range.intersects(6, 5);
+		assertEquals("intersects: Testing with no overlap and upper below both this.upper and lower", false, result);
+	}
+
+	// TC69: Testing intersects method for a case where the second range is
+	// completely below the first range
+	@Test
+	public void testIntersectsNoOverlapWithUpperBelowThisLower() {
+		Range range = new Range(5, 10);
+		boolean result = range.intersects(2, 4);
+		assertEquals("intersects: Testing with no overlap and upper below this.lower", false, result);
+	}
+
+	// TC70: Testing intersects method for a case where the second range's lower
+	// bound is above this.lower and the upper bound is not greater than lower
+	@Test
+	public void testIntersectsNoOverlapWithLowerAboveThisLowerAndUpperLessThanLower() {
+		Range range = new Range(5, 10);
+		boolean result = range.intersects(7, 6);
+		assertEquals("intersects: Testing with no overlap and lower above this.lower and upper less than lower", false,
+				result);
+	}
+
 
 }
