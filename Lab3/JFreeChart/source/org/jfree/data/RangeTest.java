@@ -2,6 +2,7 @@ package org.jfree.data;
 
 import junit.framework.TestCase;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -486,6 +487,228 @@ public class RangeTest {
 	public void testToStringWhenGivenBlankDoubles() {
 		Range range = new Range(Double.NaN, Double.NaN);
 		assertEquals("toString: Testing when both values are Zero", "Range[NaN,NaN]", range.toString());
+	}
+
+	// TC63: Testing with a positive delta value
+	@Test
+	public void testShiftWithPositiveDelta() {
+		Range range = new Range(1, 5);
+		Range expectedRange = new Range(6.0, 10.0);
+		assertEquals("shift: Testing with a positive range and positive delta",
+				expectedRange, Range.shift(range, 5));
+	}
+
+	// TC63: Testing with a negative delta value
+	@Test
+	public void testShiftWithNegativeDelta() {
+		Range range = new Range(1, 5);
+		Range expectedRange = new Range(0.0, 3.0);
+		assertEquals("shift: Testing with a positive range and negative delta",
+				expectedRange, Range.shift(range, -2));
+	}
+
+	// TC64: Testing with a negative delta value and allowZeroCrossing enabled
+	@Test
+	public void testShiftWithNegativeDeltaAndAllowZeroCrossing() {
+		Range range = new Range(1, 5);
+		Range expectedRange = new Range(-1.0, 3.0);
+		assertEquals("shift: Testing with a positive range and negative delta",
+				expectedRange, Range.shift(range, -2, true));
+
+	}
+
+	// TC65: Testing with a positive delta value and allowZeroCrossing enabled
+	@Test
+	public void testShiftWithPositiveDeltaAndNoAllowZeroCrossing() {
+		Range range = new Range(-10, -1);
+		Range expectedRange = new Range(-7.0, 0.0);
+		assertEquals("shift: Testing with a positive range and positive delta",
+				expectedRange, Range.shift(range, 3, false));
+	}
+
+	// TC65: Testing with a positive delta value, allowZeroCrossing disabled and a
+	// zero Range
+	@Test
+	public void testShiftWithPositiveDeltaAndAllowZeroCrossing() {
+		Range range = new Range(0.0, 0.0);
+		Range expectedRange = new Range(3.0, 6.0);
+		assertEquals("shift: Testing with a positive range and positive delta",
+				expectedRange, Range.shift(range, 3, true));
+	}
+
+	// TC66: Testing Intersect with positive range with value inside range
+	@Test
+	public void testIntersectWithValueInside() {
+		Range range = new Range(3, 7);
+		assertEquals("intersect: Testing with a positive range and a range that is fully within the range",
+				true, range.intersects(2, 5));
+	}
+
+	// TC67: Testing Intersect with positive range with higher value less than or
+	// equal to given lower range
+	@Test
+	public void testIntersectWithUpperEqualToLower() {
+		Range range = new Range(3, 7);
+		assertEquals("intersect: Testing with a positive range and upper value is equal to this.lower",
+				false, range.intersects(2, 3));
+	}
+
+	// TC68: Testing Intersect with lower greater than this.lower
+	@Test
+	public void testIntersectWithLowerGreaterThanLower() {
+		Range range = new Range(3, 7);
+		assertEquals("intersect: Testing with a positive range and lower is equal to this.lower",
+				true, range.intersects(4, 6));
+	}
+
+	// TC69: Testing Intersect with upper equal to this.upper
+	@Test
+	public void testIntersectWithUpperEqualToUpper() {
+		Range range = new Range(3, 7);
+		assertEquals("intersect: Testing with a positive range and range including this range's upper bound",
+				false, range.intersects(4, 7));
+	}
+
+	// TC70: Testing Intersect with upper greater than this.upper
+	@Test
+	public void testIntersectWithUpperGreaterThanUpper() {
+		Range range = new Range(3, 7);
+		assertEquals("intersect: Testing with a positive range and range greater than this range",
+				false, range.intersects(6, 8));
+	}
+
+	// TC71: Testing Intersect with upper greater than this.upper
+	@Test
+	public void testIntersectWithRangeOutOfRange() {
+		Range range = new Range(3, 7);
+		assertEquals("intersect: Testing with a positive range and range greater than this range",
+				false, range.intersects(4, 3));
+	}
+
+	// TC72: Testing getLength if Upper > Lower
+	@Test
+	public void testGetLengthWithUpperGreaterThanLower() {
+		Range range = new Range(3.0, 7.0);
+		assertEquals("getLength: Testing with upper greater than lower", 4.0, range.getLength(), 0.001);
+	}
+
+	// TC73: Testing getLength if Upper == Lower
+	@Test
+	public void testGetLengthWithUpperEqualToLower() {
+		Range range = new Range(5.0, 5.0);
+		assertEquals("getLength: Testing with upper equal to lower", 0.0, range.getLength(), 0.001);
+	}
+
+	// TC74: Testing hashCode gives the same value for the same range
+	@Test
+	public void testHashCodeConsistency() {
+		Range range = new Range(3.0, 7.0);
+		int hash1 = range.hashCode();
+		int hash2 = range.hashCode();
+		assertEquals("hashCode: Testing consistency of hash code", hash1, hash2);
+	}
+
+	// TC74.5: Testing hashCode gives the different values for different ranges
+	@Test
+	public void testHashCodeDifferentRanges() {
+		Range range = new Range(3.0, 7.0);
+		int hash1 = range.hashCode();
+		int hash2 = range.hashCode();
+		assertFalse("hashCode: Testing consistency of hash code", hash1 == hash2);
+	}
+
+	// TC75: Testing Equals if given a non-Range object
+	@Test
+	public void testEqualsWithNonRangeObject() {
+		Range range = new Range(3.0, 7.0);
+		Object nonRangeObject = new Object();
+		assertEquals("equals: Testing with a non-Range object", false, range.equals(nonRangeObject));
+	}
+
+	// TC76: Testing Equals if the lower of given range is not equal to the lower of
+	// defined range
+	@Test
+	public void testEqualsWithDifferentLower() {
+		Range range1 = new Range(3.0, 7.0);
+		Range range2 = new Range(2.0, 7.0);
+		assertEquals("equals: Testing with a different lower bound", false, range1.equals(range2));
+	}
+
+	// TC77: Testing Expand when range is not null
+	@Test
+	public void testExpandWithNonNullRange() {
+		Range inputRange = new Range(2, 6);
+		Range expectedRange = new Range(1, 8);
+		assertEquals("expand: Testing with non-null range", expectedRange, Range.expand(inputRange, 0.25, 0.5));
+	}
+
+	// TC78: Testing Expand when range is null
+	@Test(expected = IllegalArgumentException.class)
+	public void testExpandWithNullRange() {
+		Range inputRange = null;
+		Range.expand(inputRange, 0.25, 0.5);
+	}
+
+	// TC79: Testing ExpandToInclude with null range
+	@Test
+	public void testExpandToIncludeWithNullRange() {
+		Range expectedRange = new Range(5.0, 5.0);
+		assertEquals("expandToInclude: Testing with null range", expectedRange, Range.expandToInclude(null, 5.0));
+	}
+
+	// TC80: Testing ExpandToInclude with value less than lower bound
+	@Test
+	public void testExpandToIncludeWithValueLessThanLowerBound() {
+		Range inputRange = new Range(3.0, 7.0);
+		Range expectedRange = new Range(2.0, 7.0);
+		assertEquals("expandToInclude: Testing with value less than lower bound", expectedRange,
+				Range.expandToInclude(inputRange, 2.0));
+	}
+
+	// TC81: Testing ExpandToInclude with value greater than upper bound
+	@Test
+	public void testExpandToIncludeWithValueGreaterThanUpperBound() {
+		Range inputRange = new Range(3.0, 7.0);
+		Range expectedRange = new Range(3.0, 8.0);
+		assertEquals("expandToInclude: Testing with value greater than upper bound", expectedRange,
+				Range.expandToInclude(inputRange, 8.0));
+	}
+
+	// TC82: Testing ExpandToInclude with value within range
+	@Test
+	public void testExpandToIncludeWithValueWithinRange() {
+		Range inputRange = new Range(3.0, 7.0);
+		assertEquals("expandToInclude: Testing with value within range", inputRange,
+				Range.expandToInclude(inputRange, 5.0));
+	}
+
+	// TC83: Testing Combine with null range1 and non-null range2
+	@Test
+	public void testCombineWithNullRange1() {
+		Range range2 = new Range(3.0, 7.0);
+		assertEquals("combine: Testing with null range1", range2, Range.combine(null, range2));
+	}
+
+	// TC84: Testing Combine with non-null range1 and null range2
+	@Test
+	public void testCombineWithNullRange2() {
+		Range range1 = new Range(3.0, 7.0);
+		assertEquals("combine: Testing with null range2", range1, Range.combine(range1, null));
+	}
+
+	// TC85: Testing Combine with both ranges null
+	@Test
+	public void testCombineWithBothRangesNull() {
+		assertEquals("combine: Testing with both ranges null", null, Range.combine(null, null));
+	}
+
+	// TC86: Testing Combine with both ranges non-null
+	@Test
+	public void testCombineWithNonNullRanges() {
+		Range range1 = new Range(3.0, 7.0);
+		Range range2 = new Range(1.0, 5.0);
+		Range expectedRange = new Range(1.0, 7.0);
+		assertEquals("combine: Testing with non-null ranges", expectedRange, Range.combine(range1, range2));
 	}
 
 }
